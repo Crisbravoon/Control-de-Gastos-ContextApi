@@ -34,6 +34,5 @@ export const BudgetProvider = ({ children }: BugetProviderProps) => {
         <BudgetContext.Provider value={{ state, dispatch }}>
             {children}
         </BudgetContext.Provider>
-
     )
 };
