@@ -1,6 +1,12 @@
+
+import { useBudget } from "../hooks/useBudget";
 import AmountDisplay from "./AmountDisplay";
 
 export const BudgetTracker = () => {
+
+
+  const { dispatch } = useBudget()
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
@@ -11,6 +17,7 @@ export const BudgetTracker = () => {
       <div className="flex flex-col justify-center items-center gap-8">
         <button
           type="button"
+          onClick={()=> dispatch({type:'reset-budget'})}
           className="bg-pink-600 w-full p-2 rounded-lg uppercase text-white font-bold">
           Resetear app
         </button>
