@@ -1,5 +1,5 @@
 
-import { BudgetContext } from "../context/BudgetContext"
+import { BudgetContext } from "@/context/BudgetContext"
 import { useContext } from "react"
 
 

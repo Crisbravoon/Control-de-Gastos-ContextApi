@@ -2,11 +2,11 @@
 import { useMemo } from 'react';
 
 import './index.css'
-import ExpenseList from './components/expense/ExpenseList';
-import { BudgetTracker } from './components/budget/BudgetTracker';
+import ExpenseList from '@/components/expense/ExpenseList';
+import { BudgetTracker } from '@/components/budget/BudgetTracker';
 import ExpenseModal from './components/expense/ExpenseModal';
-import BudgetForm from './components/budget/BudgetForm';
-import { useBudget } from './hooks/useBudget';
+import BudgetForm from '@/components/budget/BudgetForm';
+import { useBudget } from '@/hooks/useBudget';
 
 function App() {
 

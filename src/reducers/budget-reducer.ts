@@ -1,5 +1,5 @@
 
-import { DraftExpense, Expense } from "../types";
+import { DraftExpense, Expense } from "@/types";
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -29,7 +29,7 @@ const createExpense = (draftExpense: DraftExpense): Expense => {
     }
 };
 
-export const budgetReducer = (state: budgetState = initialState, action: budgetAction) => {
+export const budgetReducer = (state: budgetState = initialState, action: budgetAction): budgetState => {
 
     switch (action.type) {
         case 'add-budget':
@@ -40,6 +40,7 @@ export const budgetReducer = (state: budgetState = initialState, action: budgetA
 
         case 'reset-budget':
             return {
+                ...state,
                 budget: 0,
                 modal: false
             }
@@ -60,5 +61,7 @@ export const budgetReducer = (state: budgetState = initialState, action: budgetA
                 modal: false
 
             }
+        default:
+            return state;
     }
 };

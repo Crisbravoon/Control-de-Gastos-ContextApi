@@ -5,10 +5,10 @@ import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
 import 'react-calendar/dist/Calendar.css'
 
-import type { DraftExpense, Value } from "../../types";
-import { categories } from "../../data/Categories";
+import type { DraftExpense, Value } from "@/types";
+import { categories } from "@/data/Categories";
+import { useBudget } from "@/hooks/useBudget";
 import ErrorMessage from "./ErrorMessage";
-import { useBudget } from "../../hooks/useBudget";
 import Swal from "sweetalert2";
 
 

@@ -1,5 +1,5 @@
 
-import type { Category } from "../types";
+import type { Category } from "@/types";
 
 export const categories :Category[]= [
     { id: '1', name: 'Ahorro', icon: 'ahorro' },
