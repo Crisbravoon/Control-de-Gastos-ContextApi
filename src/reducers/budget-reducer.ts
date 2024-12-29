@@ -42,7 +42,8 @@ export const budgetReducer = (state: budgetState = initialState, action: budgetA
             return {
                 ...state,
                 budget: 0,
-                modal: false
+                modal: false,
+                expenses: []
             }
 
         case 'show-modal':
