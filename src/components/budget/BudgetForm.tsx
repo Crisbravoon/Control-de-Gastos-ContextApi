@@ -1,8 +1,6 @@
 
 import { FormEvent, useMemo, useState } from "react";
-import { useBudget } from "../hooks/useBudget";
-
-
+import { useBudget } from "../../hooks/useBudget";
 
 const BudgetForm = () => {
     
@@ -15,11 +13,13 @@ const BudgetForm = () => {
     }, [budget]);
 
 
+    //Obtenemos los datos de los inputs
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         setBudget(+e.target.value);
     };
 
+    //Manejador del submit del formulario para agregar el presupuesto al contexto
     const handeSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         dispatch({ type: 'add-budget', payload:{ budget }})

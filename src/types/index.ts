@@ -1,5 +1,4 @@
 
-
 export type Expense = {
     id: string,
     expenseName: string,

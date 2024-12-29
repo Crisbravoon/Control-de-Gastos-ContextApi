@@ -1,11 +1,12 @@
 
 import { useMemo } from 'react';
 
-import { BudgetTracker } from './components/BudgetTracker';
-import ExpenseModal from './components/ExpenseModal';
-import BudgetForm from './components/BudgetForm'
-import { useBudget } from './hooks/useBudget'
 import './index.css'
+import ExpenseList from './components/expense/ExpenseList';
+import { BudgetTracker } from './components/budget/BudgetTracker';
+import ExpenseModal from './components/expense/ExpenseModal';
+import BudgetForm from './components/budget/BudgetForm';
+import { useBudget } from './hooks/useBudget';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
       {isValidBudget &&
         (
           <main className='max-w-3xl mx-auto py-10'>
+            <ExpenseList/>
             <ExpenseModal />
           </main>
         )}

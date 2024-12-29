@@ -1,6 +1,6 @@
+import { useBudget } from "../../hooks/useBudget";
+import AmountDisplay from "../AmountDisplay";
 
-import { useBudget } from "../hooks/useBudget";
-import AmountDisplay from "./AmountDisplay";
 
 export const BudgetTracker = () => {
 

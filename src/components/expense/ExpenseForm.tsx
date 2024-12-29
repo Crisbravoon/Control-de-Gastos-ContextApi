@@ -1,12 +1,15 @@
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 import 'react-date-picker/dist/DatePicker.css';
 import DatePicker from 'react-date-picker';
 import 'react-calendar/dist/Calendar.css'
 
-import { categories } from "../data/Categories";
-import type { DraftExpense, Value } from "../types";
+import type { DraftExpense, Value } from "../../types";
+import { categories } from "../../data/Categories";
+import ErrorMessage from "./ErrorMessage";
+import { useBudget } from "../../hooks/useBudget";
+import Swal from "sweetalert2";
 
 
 const ExpenseForm = () => {
@@ -18,20 +21,24 @@ const ExpenseForm = () => {
     date: new Date(),
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
 
+  const [error, setError] = useState('');
+
+  const { dispatch } = useBudget()
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
+
+    // Obtenemos el nombre y el valor de los inputs
     const { name, value } = e.target;
 
+    // Validamos que la cantidad sea un número positivo
     const isAmountField = ['amount'].includes(name);
 
+    // Actualizamos el estado del gasto con el nuevo valor
     setExpense(
-      {
-        ...expense,
-        [name]: isAmountField ? Number(value) : value,
-      })
+      { ...expense, [name]: isAmountField ? Number(value) : value })
   };
-
 
   const handleChangeDate = (value: Value) => {
     setExpense({
@@ -40,12 +47,41 @@ const ExpenseForm = () => {
     });
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+
+    e.preventDefault();
+    // Trae todo los valores de forma de array y si es que estan vacios 
+    if (Object.values(expense).includes('')) {
+      setError('Todos  los campos son obligatorios ');
+      return;
+    }
+    
+    dispatch({ type: 'add-expense', payload: { expense } })
+
+    Swal.fire({
+      title: "Gasto Registrado",
+      text: "Se registro tu gasto correctamente...",
+      icon: "success"
+    });
+
+    setExpense({
+      expenseName: '',
+      amount: 0,
+      category: '',
+      date: new Date(),
+    });
+    setError('');
+
+  };
+
   return (
 
-    <form className="space-y-5">
+    <form className="space-y-5" onSubmit={handleSubmit}>
       <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">
         Nuevo Gasto
       </legend>
+
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <div className="flex flex-col gap-2">
         <label
@@ -73,7 +109,6 @@ const ExpenseForm = () => {
           type="number"
           id="amount"
           value={expense.amount}
-
           name="amount"
           placeholder="Añade la cantidad"
           className="bg-slate-100 p-2  rounded-lg"

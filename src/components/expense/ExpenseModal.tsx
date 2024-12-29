@@ -3,9 +3,9 @@ import { Fragment } from 'react'
 
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { Dialog, Transition } from '@headlessui/react'
+import ExpenseForm from './ExpenseForm';
+import { useBudget } from '../../hooks/useBudget';
 
-import { useBudget } from '../hooks/useBudget'
-import ExpenseForm from './ExpenseForm'
 
 export const ExpenseModal = () => {
 
