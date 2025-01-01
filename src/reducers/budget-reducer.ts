@@ -4,8 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 export type budgetAction =
-    { type: 'add-budget', payload: { budget: number } } |
     { type: 'add-expense', payload: { expense: DraftExpense } } |
+    { type: 'editing-expense', payload: { id: Expense['id'] } } |
+    { type: 'delete-expense', payload: { id: Expense['id'] } } |
+    { type: 'update-expense', payload: { expense: Expense } } |
+    { type: 'add-budget', payload: { budget: number } } |
     { type: 'reset-budget' } |
     { type: 'show-modal' }
 
@@ -13,13 +16,25 @@ export type budgetAction =
 export type budgetState = {
     budget: number,
     modal: boolean,
-    expenses: Expense[]
+    expenses: Expense[],
+    editingId: Expense['id']
+};
+
+const initialBudget = () : number=>{
+    const localStorageBudget = localStorage.getItem('budget');
+    return localStorageBudget? Number(localStorageBudget) : 0;
+};
+
+const localStorageExpenses = () : Expense[] =>{
+    const localStorageExpenses = localStorage.getItem('expenses');
+    return localStorageExpenses? JSON.parse(localStorageExpenses) : [];
 };
 
 export const initialState: budgetState = {
-    budget: 0,
+    budget: initialBudget(),
+    expenses: localStorageExpenses(),
     modal: false,
-    expenses: []
+    editingId: ''
 };
 
 const createExpense = (draftExpense: DraftExpense): Expense => {
@@ -43,13 +58,14 @@ export const budgetReducer = (state: budgetState = initialState, action: budgetA
                 ...state,
                 budget: 0,
                 modal: false,
-                expenses: []
+                expenses: [],
             }
 
         case 'show-modal':
             return {
                 ...state,
-                modal: !state.modal
+                modal: !state.modal,
+                editingId: ''
             }
 
         case 'add-expense':
@@ -62,6 +78,31 @@ export const budgetReducer = (state: budgetState = initialState, action: budgetA
                 modal: false
 
             }
+
+        case 'delete-expense':
+            return {
+                ...state,
+                expenses: state.expenses.filter(exp => exp.id !== action.payload.id)
+            }
+
+        case 'editing-expense':
+            return {
+                ...state,
+                editingId: action.payload.id,
+                modal: true,
+            }
+
+        case 'update-expense':
+            return {
+                ...state,
+
+                expenses: state.expenses.map(
+                    exp => exp.id === action.payload.expense.id ? action.payload.expense : expense),
+                    modal: false,
+                    editingId: '',
+                
+            }
+
         default:
             return state;
     }
