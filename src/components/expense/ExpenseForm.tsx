@@ -22,13 +22,15 @@ const ExpenseForm = () => {
   });
 
   const [error, setError] = useState('');
-  const { dispatch, state } = useBudget();
+  const [previousAmount, setPreviousAmount] = useState(0);
+  const { dispatch, state, totalRemaining } = useBudget();
 
   useEffect(() => {
 
     if (state.editingId) {
       const expenseToEdit = state.expenses.filter((exp) => exp.id === state.editingId)[0];
       setExpense(expenseToEdit);
+      setPreviousAmount(expenseToEdit.amount);
     }
   }, [state.editingId])
 
@@ -61,39 +63,44 @@ const ExpenseForm = () => {
     if (Object.values(expense).includes('')) {
       setError('Todos  los campos son obligatorios ');
       return;
+    };
+
+    if ((expense.amount - previousAmount) > totalRemaining) {
+      setError('Sobre pasa el presupuesto')
+      return;
     }
 
     //Agregando o Actuliazando el gasto.
     state.editingId
-      ? (dispatch({ type: 'update-expense', payload: { expense: { id: state.editingId, ...expense }}})
+      ? (dispatch({ type: 'update-expense', payload: { expense: { id: state.editingId, ...expense } } })
         , Swal.fire({
-            title: "Gasto Actualizado",
-            text: "Tu gasto se ha actulizado correctamente...",
-            icon: "success"
+          title: "Gasto Actualizado",
+          text: "Tu gasto se ha actulizado correctamente...",
+          icon: "success"
         }))
 
-      : (dispatch({ type: 'add-expense', payload: { expense }})
+      : (dispatch({ type: 'add-expense', payload: { expense } })
         , Swal.fire({
-            title: "Gasto Registrado",
-            text: "Se registro tu gasto correctamente...",
-            icon: "success"
+          title: "Gasto Registrado",
+          text: "Se registro tu gasto correctamente...",
+          icon: "success"
         }))
 
     setExpense({
-        expenseName: '',
-        amount: 0,
-        category: '',
-        date: new Date(),
+      expenseName: '',
+      amount: 0,
+      category: '',
+      date: new Date(),
     });
 
-    setError('');
+    setPreviousAmount(0);
   };
 
   return (
 
     <form className="space-y-5" onSubmit={handleSubmit}>
       <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">
-      {state.editingId ? 'Actualización Gasto': 'Nuevo Gasto'}
+        {state.editingId ? 'Actualización Gasto' : 'Nuevo Gasto'}
       </legend>
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
@@ -169,7 +176,7 @@ const ExpenseForm = () => {
 
       <input type="submit"
         className="bg-blue-600 uppercase w-full cursor-pointer text-white font-bold p-2 rounded-lg "
-        value={state.editingId ? 'Guardar Cambios' :'Registrar Gasto'} />
+        value={state.editingId ? 'Guardar Cambios' : 'Registrar Gasto'} />
     </form>
   )
 }
